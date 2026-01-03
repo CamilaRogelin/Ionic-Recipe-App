@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { NgForOf } from '@angular/common';
 import {
@@ -30,16 +31,19 @@ import { RecipesService } from '../services/recipes.service';
 })
 export class HomePage {
 
-  // small list of recipes that I will show in the screen
+  // just keep a small list here to show on the screen
   recipes: any[] = [];
 
-  constructor(private recipesService: RecipesService) {
+  constructor(
+    private recipesService: RecipesService,
+    private router: Router,   // new guy here
+  ) {
     // very simple: ask the service for all recipes
     this.recipes = this.recipesService.getAllRecipes();
   }
 
-  // later we maybe use this for navigation :)
   openRecipe(id: number) {
-    alert('you clicked recipe with id: ' + id);
+    // go to the detail page and send the id in the url
+    this.router.navigate(['/recipe-detail', id]);
   }
 }

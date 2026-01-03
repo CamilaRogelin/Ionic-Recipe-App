@@ -1,20 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonicModule } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { RecipesService } from '../../services/recipes.service';
 
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.page.html',
   styleUrls: ['./recipe-detail.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule],
 })
-export class RecipeDetailPage implements OnInit {
+export class RecipeDetailPage {
 
-  constructor() { }
+  recipe: any;   // here I keep the selected recipe
 
-  ngOnInit() {
+  constructor(
+    private route: ActivatedRoute,
+    private recipesService: RecipesService,
+  ) {
+    // get the "id" from the url
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const id = idParam ? +idParam : 0;
+
+    // ask the service for only this recipe
+    this.recipe = this.recipesService.getRecipeById(id);
   }
-
 }

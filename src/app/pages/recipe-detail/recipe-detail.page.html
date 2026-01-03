@@ -1,13 +1,16 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>recipe-detail</ion-title>
+    <ion-title>{{ recipe?.title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">recipe-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <h2>{{ recipe?.title }}</h2>
+
+  <p><strong>Ingredients:</strong></p>
+  <p>{{ recipe?.ingredients }}</p>
+
+  <p style="margin-top: 20px; font-size: 12px;">
+    (just a small fake vegan recipe for study hehe)
+  </p>
 </ion-content>
