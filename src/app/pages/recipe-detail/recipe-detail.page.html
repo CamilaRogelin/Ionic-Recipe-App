@@ -5,12 +5,26 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
   <h2>{{ recipe?.title }}</h2>
 
-  <p><strong>Ingredients:</strong></p>
+  <!-- basic meta info -->
+  <p style="font-size: 13px; color: gray;">
+    Time: {{ recipe?.time }} | Difficulty: {{ recipe?.difficulty }}
+  </p>
+
+  <p style="margin-top: 16px;"><strong>Description:</strong></p>
+  <p>{{ recipe?.description }}</p>
+
+  <p style="margin-top: 16px;"><strong>Ingredients:</strong></p>
   <p>{{ recipe?.ingredients }}</p>
 
-  <p style="margin-top: 20px; font-size: 12px;">
-    (just a small fake vegan recipe for study hehe)
+  <!-- back button to go to list again -->
+  <ion-button expand="block" style="margin-top: 20px;" (click)="goBack()">
+    Back to recipes
+  </ion-button>
+
+  <p style="margin-top: 16px; font-size: 12px;">
+    (just a fake vegan recipe for college project, not real restaurant haha)
   </p>
 </ion-content>

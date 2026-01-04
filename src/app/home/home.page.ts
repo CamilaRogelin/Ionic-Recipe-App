@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { NgForOf } from '@angular/common';
+
 import {
   IonContent,
   IonHeader,
@@ -9,9 +10,12 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonButtons,
+  IonButton,
 } from '@ionic/angular/standalone';
 
 import { RecipesService } from '../services/recipes.service';
+
 
 @Component({
   selector: 'app-home',
@@ -27,16 +31,17 @@ import { RecipesService } from '../services/recipes.service';
     IonItem,
     IonLabel,
     NgForOf,
+    IonButtons,
+    IonButton,
   ],
 })
 export class HomePage {
-
   // just keep a small list here to show on the screen
   recipes: any[] = [];
 
   constructor(
     private recipesService: RecipesService,
-    private router: Router,   // new guy here
+    private router: Router,
   ) {
     // very simple: ask the service for all recipes
     this.recipes = this.recipesService.getAllRecipes();

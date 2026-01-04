@@ -1,6 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>My Vegan Recipe App</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="/about">
+        About
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,6 +19,15 @@
       <ion-label>
         <h2>{{ r.title }}</h2>
         <p>{{ r.ingredients }}</p>
+
+        <!-- small extra info -->
+        <p style="font-size: 12px; margin-top: 4px;">
+          Time: {{ r.time }} | Difficulty: {{ r.difficulty }}
+        </p>
+
+        <p style="font-size: 12px; margin-top: 4px;">
+          {{ r.description }}
+        </p>
       </ion-label>
     </ion-item>
   </ion-list>
