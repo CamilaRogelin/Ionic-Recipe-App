@@ -1,21 +1,26 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
-import { NgForOf } from '@angular/common';
+import { CommonModule, NgForOf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import {
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonList,
-  IonItem,
-  IonLabel,
   IonButtons,
   IonButton,
+  IonInput,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonImg,
+  IonItem,
+  IonLabel,
 } from '@ionic/angular/standalone';
 
-import { RecipesService } from '../services/recipes.service';
-
+import { RecipeApiService, ApiRecipeSummary } from '../services/recipe-api.service';
 
 @Component({
   selector: 'app-home',
@@ -27,28 +32,71 @@ import { RecipesService } from '../services/recipes.service';
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonList,
+    IonButtons,
+    IonButton,
+    IonInput,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonImg,
     IonItem,
     IonLabel,
     NgForOf,
-    IonButtons,
-    IonButton,
+    CommonModule,
+    FormsModule,
   ],
 })
 export class HomePage {
-  // just keep a small list here to show on the screen
-  recipes: any[] = [];
+
+  ingredientsText: string = '';
+  apiRecipes: ApiRecipeSummary[] = [];
+  isLoading = false;
+  errorMessage = '';
 
   constructor(
-    private recipesService: RecipesService,
+    private recipeApi: RecipeApiService,
     private router: Router,
-  ) {
-    // very simple: ask the service for all recipes
-    this.recipes = this.recipesService.getAllRecipes();
+  ) {}
+
+  searchRecipes() {
+    this.errorMessage = '';
+    const query = this.ingredientsText.trim();
+
+    if (!query) {
+      this.errorMessage = 'Please type at least one ingredient :)';
+      this.apiRecipes = [];
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.recipeApi.searchRecipes(query).subscribe({
+      next: (data) => {
+        this.apiRecipes = data.results ?? [];
+        this.isLoading = false;
+
+        if (this.apiRecipes.length === 0) {
+          this.errorMessage = 'No recipes found for this search';
+        }
+      },
+      error: (err) => {
+        console.log('api error', err);
+        this.isLoading = false;
+        this.errorMessage = 'Something broke with api, I try again later :(';
+      }
+    });
   }
 
-  openRecipe(id: number) {
-    // go to the detail page and send the id in the url
-    this.router.navigate(['/recipe-detail', id]);
+  openDetails(recipe: ApiRecipeSummary) {
+    this.router.navigate(['/recipe-detail', recipe.id]);
+  }
+
+  goToFavourites() {
+    this.router.navigate(['/favourites']);
+  }
+
+  goToAbout() {
+    this.router.navigate(['/about']);
   }
 }

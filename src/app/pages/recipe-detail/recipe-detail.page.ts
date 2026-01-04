@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecipesService } from '../../services/recipes.service';
+import { RecipeApiService } from '../../services/recipe-api.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -11,34 +11,49 @@ import { RecipesService } from '../../services/recipes.service';
   standalone: true,
   imports: [IonicModule, CommonModule],
 })
-export class RecipeDetailPage {
+export class RecipeDetailPage implements OnInit {
 
-  recipe: any;   // here I keep the selected recipe
+  recipe: any;       // here I keep the recipe data from api
+  isLoading = false;
+  errorMessage = '';
 
   constructor(
     private route: ActivatedRoute,
-    private recipesService: RecipesService,
-    private router: Router,  // added router to navigate back
-  ) {
-    // get the "id" from the url
+    private recipeApi: RecipeApiService,
+    private router: Router,
+  ) {}
+
+  ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? +idParam : 0;
 
-    // ask the service for only this recipe
-    this.recipe = this.recipesService.getRecipeById(id);
+    if (!id) {
+      this.errorMessage = 'Invalid recipe id in url :(';
+      return;
+    }
+
+    this.loadRecipe(id);
   }
 
-  // simple back button, nothing complex
+  // very simple call to the api to get the full info
+  loadRecipe(id: number) {
+    this.isLoading = true;
+
+    this.recipeApi.getRecipeDetails(id).subscribe({
+      next: (data) => {
+        this.recipe = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.log('error loading recipe details', err);
+        this.errorMessage = 'Could not load recipe details now, sorry.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // go back to home list
   goBack() {
     this.router.navigate(['/home']);
-  }
-
-  // when user clicks favourite button
-  toggleFavourite() {
-    if (!this.recipe) return;
-
-    this.recipesService.toggleFavourite(this.recipe.id);
-    // refresh local copy just to be sure
-    this.recipe = this.recipesService.getRecipeById(this.recipe.id);
   }
 }

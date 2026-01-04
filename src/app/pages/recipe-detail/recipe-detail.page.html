@@ -1,35 +1,47 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ recipe?.title }}</ion-title>
+    <ion-title>{{ recipe?.title || 'Recipe Details' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-  <h2>{{ recipe?.title }}</h2>
+  <p *ngIf="isLoading">Loading recipe details...</p>
+  <p *ngIf="errorMessage">{{ errorMessage }}</p>
 
-  <!-- basic meta info -->
-  <p style="font-size: 13px; color: gray;">
-    Time: {{ recipe?.time }} | Difficulty: {{ recipe?.difficulty }}
-  </p>
+  <ng-container *ngIf="recipe && !isLoading">
 
-  <!-- favourite button -->
-  <ion-button expand="block" style="margin-top: 10px;" (click)="toggleFavourite()">
-    {{ recipe?.isFavourite ? 'Remove from favourites' : 'Add to favourites' }}
-  </ion-button>
+    <ion-img *ngIf="recipe.image" [src]="recipe.image"></ion-img>
 
-  <p style="margin-top: 16px;"><strong>Description:</strong></p>
-  <p>{{ recipe?.description }}</p>
+    <h2 style="margin-top: 16px;">{{ recipe.title }}</h2>
 
-  <p style="margin-top: 16px;"><strong>Ingredients:</strong></p>
-  <p>{{ recipe?.ingredients }}</p>
+    <p style="font-size: 13px; color: gray;">
+      Ready in {{ recipe.readyInMinutes }} min
+      • Servings: {{ recipe.servings }}
+    </p>
 
-  <!-- back button to go to list again -->
-  <ion-button expand="block" style="margin-top: 20px;" (click)="goBack()">
-    Back to recipes
-  </ion-button>
+    <h3 style="margin-top: 20px;">Ingredients</h3>
+    <ul>
+      <li *ngFor="let ing of recipe.extendedIngredients">
+        {{ ing.original }}
+      </li>
+    </ul>
 
-  <p style="margin-top: 16px; font-size: 12px;">
-    (just a fake vegan recipe for college project, not real restaurant haha)
-  </p>
+    <h3 style="margin-top: 20px;">Instructions</h3>
+    <ol *ngIf="recipe.analyzedInstructions?.length > 0">
+      <li *ngFor="let step of recipe.analyzedInstructions[0]?.steps">
+        {{ step.number }}. {{ step.step }}
+      </li>
+    </ol>
+
+    <p *ngIf="!recipe.analyzedInstructions || recipe.analyzedInstructions.length === 0">
+      No instructions text from api for this one, just imagine a nice cooking flow here haha.
+    </p>
+
+    <ion-button expand="block" style="margin-top: 24px;" (click)="goBack()">
+      Back to recipes
+    </ion-button>
+
+  </ng-container>
+
 </ion-content>

@@ -1,12 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>My Vegan Recipe App</ion-title>
+    <ion-title>
+      G00472929
+    </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button routerLink="/favourites">
+      <ion-button (click)="goToFavourites()">
         Fav
       </ion-button>
-      <ion-button routerLink="/about">
+
+      <ion-button (click)="goToAbout()">
         About
       </ion-button>
     </ion-buttons>
@@ -15,24 +18,38 @@
 
 
 <ion-content class="ion-padding">
-  <ion-list>
-    <ion-item
-      *ngFor="let r of recipes"
-      (click)="openRecipe(r.id)"
-    >
-      <ion-label>
-        <h2>{{ r.title }}</h2>
-        <p>{{ r.ingredients }}</p>
 
-        <!-- small extra info -->
-        <p style="font-size: 12px; margin-top: 4px;">
-          Time: {{ r.time }} | Difficulty: {{ r.difficulty }}
-        </p>
+  <!-- simple search box for ingredients -->
+  <ion-item>
+    <ion-label position="stacked">Enter ingredients</ion-label>
+    <ion-input
+      [(ngModel)]="ingredientsText"
+      placeholder="example: pasta, tomato, cheese">
+    </ion-input>
+  </ion-item>
 
-        <p style="font-size: 12px; margin-top: 4px;">
-          {{ r.description }}
-        </p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-button expand="block" style="margin-top: 10px;" (click)="searchRecipes()">
+    SEARCH
+  </ion-button>
+
+  <p *ngIf="isLoading">Loading recipes from api...</p>
+  <p *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <!-- api results -->
+  <ion-card *ngFor="let r of apiRecipes">
+
+    <ion-img [src]="r.image"></ion-img>
+
+    <ion-card-header>
+      <ion-card-title>{{ r.title }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-button size="small" (click)="openDetails(r)">
+        Details
+      </ion-button>
+    </ion-card-content>
+
+  </ion-card>
+
 </ion-content>
