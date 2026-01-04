@@ -17,6 +17,10 @@ export class RecipeDetailPage implements OnInit {
   isLoading = false;
   errorMessage = '';
 
+  // here I control if I show metric or us units
+  // by default I use metric cause I am in europe now :)
+  selectedUnit: 'metric' | 'us' = 'metric';
+
   constructor(
     private route: ActivatedRoute,
     private recipeApi: RecipeApiService,
@@ -50,6 +54,32 @@ export class RecipeDetailPage implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  // switch between metric and us
+  changeUnit(unit: 'metric' | 'us') {
+    this.selectedUnit = unit;
+  }
+
+  // build a small text for each ingredient based on the unit selected
+  getIngredientText(ing: any): string {
+    // sometimes api not give measures, so I just show original
+    if (!ing || !ing.measures) {
+      return ing?.original || '';
+    }
+
+    const measures = ing.measures[this.selectedUnit];
+
+    if (!measures || measures.amount == null) {
+      // if the unit is missing I fallback to original text
+      return ing.original;
+    }
+
+    const amount = measures.amount;
+    const unitLong = measures.unitLong || '';
+
+    // not doing any rounding crazy stuff here, just normal concat
+    return `${amount} ${unitLong}`.trim();
   }
 
   // go back to home list

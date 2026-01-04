@@ -20,10 +20,27 @@
       • Servings: {{ recipe.servings }}
     </p>
 
-    <h3 style="margin-top: 20px;">Ingredients</h3>
+    <!-- small unit toggle, nothing very fancy -->
+    <div style="margin-top: 16px; margin-bottom: 8px;">
+      <strong>Units:</strong>
+      <ion-button size="small"
+                  [fill]="selectedUnit === 'metric' ? 'solid' : 'outline'"
+                  (click)="changeUnit('metric')">
+        Metric
+      </ion-button>
+
+      <ion-button size="small"
+                  [fill]="selectedUnit === 'us' ? 'solid' : 'outline'"
+                  (click)="changeUnit('us')">
+        US
+      </ion-button>
+    </div>
+
+    <h3 style="margin-top: 10px;">Ingredients</h3>
     <ul>
       <li *ngFor="let ing of recipe.extendedIngredients">
-        {{ ing.original }}
+        <!-- amount + unit based on selectedUnit -->
+        {{ getIngredientText(ing) }} - {{ ing.name || ing.original }}
       </li>
     </ul>
 
@@ -35,7 +52,7 @@
     </ol>
 
     <p *ngIf="!recipe.analyzedInstructions || recipe.analyzedInstructions.length === 0">
-      No instructions text from api for this one, just imagine a nice cooking flow here haha.
+      No instructions text from api for this one, so just imagine a nice cooking flow here haha.
     </p>
 
     <ion-button expand="block" style="margin-top: 24px;" (click)="goBack()">
