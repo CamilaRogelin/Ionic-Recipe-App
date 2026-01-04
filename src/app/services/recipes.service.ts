@@ -15,6 +15,7 @@ export class RecipesService {
       description: 'easy curry that I like, kind of basic but tasty',
       time: '25 min',
       difficulty: 'easy',
+      isFavourite: false,   // new flag
     },
     {
       id: 2,
@@ -23,6 +24,7 @@ export class RecipesService {
       description: 'quick stir fry tofu for busy days haha',
       time: '15 min',
       difficulty: 'easy/medium',
+      isFavourite: false,   // new flag
     },
   ];
 
@@ -38,6 +40,19 @@ export class RecipesService {
   // find recipe by id. not super fancy but ok
   getRecipeById(id: number) {
     return this.recipes.find(r => r.id === id);
+  }
+
+  // toggle favourite on/off for one recipe
+  toggleFavourite(id: number) {
+    const recipe = this.getRecipeById(id);
+    if (recipe) {
+      recipe.isFavourite = !recipe.isFavourite;
+    }
+  }
+
+  // return only the recipes that are marked as fav
+  getFavouriteRecipes() {
+    return this.recipes.filter(r => r.isFavourite);
   }
 
 }

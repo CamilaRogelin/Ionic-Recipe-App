@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>My Favourites</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <p *ngIf="favouriteRecipes.length === 0">
+    You dont have any favourite recipe yet, please add one first :)
+  </p>
+
+  <ion-list *ngIf="favouriteRecipes.length > 0">
+    <ion-item
+      *ngFor="let r of favouriteRecipes"
+      (click)="openDetail(r.id)"
+    >
+      <ion-label>
+        <h2>{{ r.title }}</h2>
+        <p style="font-size: 12px;">
+          Time: {{ r.time }} | Difficulty: {{ r.difficulty }}
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" style="margin-top: 16px;" (click)="goBackHome()">
+    Back to recipes list
+  </ion-button>
+
+</ion-content>

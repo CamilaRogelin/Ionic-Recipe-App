@@ -32,4 +32,13 @@ export class RecipeDetailPage {
   goBack() {
     this.router.navigate(['/home']);
   }
+
+  // when user clicks favourite button
+  toggleFavourite() {
+    if (!this.recipe) return;
+
+    this.recipesService.toggleFavourite(this.recipe.id);
+    // refresh local copy just to be sure
+    this.recipe = this.recipesService.getRecipeById(this.recipe.id);
+  }
 }

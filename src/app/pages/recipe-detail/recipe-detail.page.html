@@ -13,6 +13,11 @@
     Time: {{ recipe?.time }} | Difficulty: {{ recipe?.difficulty }}
   </p>
 
+  <!-- favourite button -->
+  <ion-button expand="block" style="margin-top: 10px;" (click)="toggleFavourite()">
+    {{ recipe?.isFavourite ? 'Remove from favourites' : 'Add to favourites' }}
+  </ion-button>
+
   <p style="margin-top: 16px;"><strong>Description:</strong></p>
   <p>{{ recipe?.description }}</p>
 
