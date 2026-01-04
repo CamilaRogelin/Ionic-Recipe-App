@@ -7,7 +7,7 @@
 <ion-content class="ion-padding">
 
   <p *ngIf="favouriteRecipes.length === 0">
-    You dont have any favourite recipe yet, please add one first :)
+    You dont have any favourite recipe yet. Please open one recipe and click "Add to favourites" first :)
   </p>
 
   <ion-list *ngIf="favouriteRecipes.length > 0">
@@ -18,7 +18,7 @@
       <ion-label>
         <h2>{{ r.title }}</h2>
         <p style="font-size: 12px;">
-          Time: {{ r.time }} | Difficulty: {{ r.difficulty }}
+          Ready in {{ r.readyInMinutes }} min • Servings: {{ r.servings }}
         </p>
       </ion-label>
     </ion-item>
@@ -26,6 +26,10 @@
 
   <ion-button expand="block" style="margin-top: 16px;" (click)="goBackHome()">
     Back to recipes list
+  </ion-button>
+
+  <ion-button expand="block" fill="outline" style="margin-top: 8px;" (click)="refreshList()">
+    Refresh favourites
   </ion-button>
 
 </ion-content>

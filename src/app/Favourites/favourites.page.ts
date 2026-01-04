@@ -11,7 +11,6 @@ import {
 } from '@ionic/angular/standalone';
 import { CommonModule, NgForOf } from '@angular/common';
 import { Router } from '@angular/router';
-import { RecipesService } from '../services/recipes.service';
 
 @Component({
   selector: 'app-favourites',
@@ -34,13 +33,29 @@ import { RecipesService } from '../services/recipes.service';
 export class FavouritesPage {
 
   favouriteRecipes: any[] = [];
+  private favStorageKey = 'favouriteRecipes';
 
   constructor(
-    private recipesService: RecipesService,
     private router: Router,
   ) {
-    // load current favourites when page is created
-    this.favouriteRecipes = this.recipesService.getFavouriteRecipes();
+    // when page is created I just load from storage
+    this.loadFavourites();
+  }
+
+  // small helper to read from localStorage
+  loadFavourites() {
+    try {
+      const json = localStorage.getItem(this.favStorageKey);
+      if (!json) {
+        this.favouriteRecipes = [];
+        return;
+      }
+      const parsed = JSON.parse(json);
+      this.favouriteRecipes = Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      console.log('error loading favourites', e);
+      this.favouriteRecipes = [];
+    }
   }
 
   openDetail(id: number) {
@@ -49,5 +64,10 @@ export class FavouritesPage {
 
   goBackHome() {
     this.router.navigate(['/home']);
+  }
+
+  // optional small refresh button, in case user change fav on other screen
+  refreshList() {
+    this.loadFavourites();
   }
 }

@@ -20,6 +20,11 @@
       • Servings: {{ recipe.servings }}
     </p>
 
+    <!-- favourite button, simple style -->
+    <ion-button expand="block" style="margin-top: 10px;" (click)="toggleFavourite()">
+      {{ isFavourite ? 'Remove from favourites' : 'Add to favourites' }}
+    </ion-button>
+
     <!-- small unit toggle, nothing very fancy -->
     <div style="margin-top: 16px; margin-bottom: 8px;">
       <strong>Units:</strong>
